@@ -1,22 +1,32 @@
 
 public class Edge {
 
-	private int i;
-	private int j;
+	private int first;
+	private int second;
 	public Edge(int x,int y)
 	{
-		this.i=x;
-		this.j=y;
+		this.first=x;
+		this.second=y;
 	}
 	
-	public int first()
+	public int getFirst()
 	{
-		return i;
+		return first;
 	}
 	
-	public int second()
+	public int getSecond()
 	{
-		return j;
+		return second;
+	}
+	
+	public void setFirst(int s)
+	{
+		this.first=s;
+	}
+	
+	public void setSecond(int s)
+	{
+		this.second=s;
 	}
 	
 }

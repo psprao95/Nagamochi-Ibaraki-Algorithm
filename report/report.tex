@@ -154,69 +154,76 @@ Module 2 receives input parameters from the first module (graph).
 \subsection{Presentation of Results}
 \begin{itemize}
 
-\item Module 3 takes the output parameters of \textit{Module 2} i.e. the capacities and link matrices and computes
- \begin{itemize}
- \item the \textbf{total cost} of the network
- \item the \textbf{density} of the network i.e. the number of links with \textbf{non-zero} capacities divided by the maximum possible number of links which is N*(N-1)
- \end{itemize}
+\item Module 3 takes the output parameters of \textit{Module 2} i.e. the \textbf{edge connectivity} for a graph with n nodes and m edges
+
+\item For each value of m we had generated 5 graphs. The edge connectivity for that value of m is the average of the edge connectivities of these 5 graphs
+ \item The above computation is repeated for all \textbf{m} values
+
+\item We compute the \textbf{spread} of the each edge connectivity value. 
+
+\item The \textit{spread} of an edge connectivity value is the difference between the smallest and largest value of m for which the value occurs.
  
- \item The above computation is repeated for all k values
+
  
 \item We then try to answer questions such as:
 \begin{itemize}
-\item How does the total cost of the network depend on k?
-\item How does the density of the obtained network depend on k? 
+\item How does the edge connectivity of the network vary with the value of m?
+\item How does spread of an edge connectivity value vary with the value of m? 
 \end{itemize}
 
-\item We show some of the obtained network topologies graphically 
+
 \end{itemize}
 
 We present the execution of our project using the flow chart below.\\
 
-  \includegraphics[scale=0.6]{fig/flowchart.png}
+  \includegraphics[scale=0.2]{fig/flowchart.png}
 \end{itemize}
 
 
 \section{Nagamochi Ibaraki Algorithm - Explanation}
 \begin{itemize}
-\item Suppose we have N vertices and the vertices are numbered from 1,2,...,N
 
-\item For every pair of vertices i and j we define a path $\pi(i,j,r)$ which is  the shortest path from i to j that passes through vertices numbered atmost r.
 
-\item This problem has a simple recursive structure
+\item The goal is to find the edge connectivity of a graph G=(V,E) i.e. the minimum number of edges which must be deleted to disconnect G
 
-\item \textbf{Base Case}: The path $\pi(i,j,0)$ cannot pass through any vertices, so it is the edge(if any) between i an j
+\item \textbf{Base Case}: There are only two nodes i and j in the graph, so the edge connectivity of the graph  is the number of edges (if any) between i and j
 
-\item \textbf{Recursive Case}: The path $\pi(i,j,r)$ will have two cases
+\item \textbf{Recursive Case}: 
 \begin{itemize}
-\item The path does not pass through the vertex labeled r, so it must pass through the vertices numbered atmost r-1 $\implies \pi(i,j,r) = \pi(i,j,r-1)$
+\item There are n nodes in the current graph, $n>=3$
+\item We find the maximum adjacency ordering of the nodes in the current graph. Let it be $v_{1},v_{2},..v_{n-1},v_{n}$
 
-\item The path passes through the vertex labeled r. It will consist of the path from i to r and the path from r to j, each of which passes through vertices numbered atmost r-1 
+\item We take the last two nodes in the above ordering, x=$v_{n-1}$ and y=$v_{n}$. Then, $\lambda(x,y$)= degree(y)
+
+\item Merge nodes x and y into one node. Let $G_{xy}$ be the resulting graph.
+
+\item Find the edge connectivity of $G_{xy}$. Let it be b.
+
+\item Return min(a,b)
 
 
 
 \end{itemize}
 
 
-\item We first try our hands at a straightforward dynamic programming approach, which is shown below
 
 
 
 
 
-\item  We can simplify the algorithm by removing the third dimension. We can also modify the algorithm to support numbering the vertices arbitrarily
+
 \begin{algorithm}[H]
     \caption{NagamochiIbarakiAlgorithm}
     \begin{algorithmic}[1]
         \Procedure{NagamochIbaraki}{$V,E$}
       
-      \State n=nodes.length
+      \State $n= \mid V \mid$
       \If{$n=2$}
-      \State return degree (y)
+      \State return $\mid E \mid$
       \EndIf
       
         
-        \State v[] = maximumAdjacencyOrdering(V)
+        \State $[v_{1},v_{2},...v_{n}]$ = maximumAdjacencyOrdering(V)
         
         \State $x=v_{n-1}$
         \State $y=v_{n}$
@@ -233,9 +240,8 @@ We present the execution of our project using the flow chart below.\\
     \end{algorithm}
 
 
-\item The \textbf{dist} matrix gives the shortest path distances between all pairs of nodes.
-\item 
-The \textbf{pred} matrix gives the node with maximum number in the shortest path between any two nodes.
+\item The result  is the edge connectivity of the graph.
+
 \end{itemize}
 
 \section{Observations and Analysis}
@@ -244,29 +250,20 @@ The \textbf{pred} matrix gives the node with maximum number in the shortest path
 
 \item The program produces an output as shown in the figure below.\\
 
- \includegraphics[scale=0.32]{fig/output.png}
+% \includegraphics[scale=0.32]{fig/plot1.png}
  
-\item The output results are stored in a \textit{csv} file. The graphs are generated in \textbf{R}.
-\item We plot the graph of the parameter \textbf{k} vs. \textbf{cost of the network}. We can clearly see that the cost of the network \textbf{decreases} with increase in the value of k. \\
-\includegraphics[scale=0.6]{fig/cost.png}
+\item The output results are stored in a \textit{csv} file. The graphs are generated in \textbf{R}
 
-\item We plot the graph of the parameter \textbf{k} against the \textbf{density of the network}. We can clearly see that the density of the network \textbf{increases} with increase in the value of k. \\
+\item We plot the graph of the number of edges \textbf{m} vs. the edge connectivity \textbf{$\lambda(G)$}. We can clearly see that the cost of the network \textbf{decreases} with increase in the value of k. \\
 
-\includegraphics[scale=0.6]{fig/density.png}
+\includegraphics[scale=0.7]{fig/plot1.png}
 
+\item We plot the graph of edge connectivity values \textbf{lambda(G)} against the \textbf{spread}. We can clearly see that the density of the network \textbf{increases} with increase in the value of k. \\
 
-\item Network topology for k=3\\
-
-\includegraphics[scale=0.35]{fig/k3.png}
-
-\item Network topology for k=8\\
-
-\includegraphics[scale=0.35]{fig/k8.png}
+\includegraphics[scale=0.6]{fig/plot2.png}
 
 
-\item Network topology for k=14\\
 
-\includegraphics[scale=0.35]{fig/k14.png}
 
 \item We can clearly see that the \textbf{density} of the resulting network \textbf{increases} with increasing value of k.
 \end{itemize}
@@ -297,12 +294,12 @@ The \textbf{pred} matrix gives the node with maximum number in the shortest path
   \begin{itemize}
   \item Downloads the project files and store them in a folder
   \item Open the project folder in Eclipse
-  \item Open the file \textbf{NetworkDesignModel.java}
+  \item Open the file \textbf{Presentation.java}
   \item Right Click $->$ Run as $->$ Java Application
   \item Alternatively,navigate to the folder in \textbf{terminal} and run the following commands
   \begin{itemize}
-  \item javac NetworkDesignModel.java
-  \item java NetworkDesignModel
+  \item javac Presentation.java
+  \item java Presentation
   \end{itemize}
   \end{itemize}
 
@@ -315,12 +312,12 @@ The \textbf{pred} matrix gives the node with maximum number in the shortest path
 \lstinputlisting{/users/psprao/eclipse-workspace/Nagamochi-Ibaraki/src/InputGeneration.java}
 
 \pagebreak
-\textbf{Module 2: FloydWarshall.java}
-\lstinputlisting{/users/psprao/eclipse-workspace/Nagamochi-Ibaraki/src/InputGeneration.java}
+\textbf{Module 2: NagamochiIbaraki.java}
+\lstinputlisting{/users/psprao/eclipse-workspace/Nagamochi-Ibaraki/src/NagamochiIbaraki.java}
 
 \pagebreak
-\textbf{Module 3: NetworkDesignModel.java}
-\lstinputlisting{/users/psprao/eclipse-workspace/Nagamochi-Ibaraki/src/InputGeneration.java}
+\textbf{Module 3: Presentation.java}
+\lstinputlisting{/users/psprao/eclipse-workspace/Nagamochi-Ibaraki/src/Presentation.java}
 
 \pagebreak
 \textbf{Utils.java}
@@ -328,6 +325,9 @@ The \textbf{pred} matrix gives the node with maximum number in the shortest path
 
 \textbf{Edge.java}
 \lstinputlisting{/users/psprao/eclipse-workspace/Nagamochi-Ibaraki/src/Edge.java}
+
+\textbf{Visualization.R.java}
+\lstinputlisting{/users/psprao/eclipse-workspace/Nagamochi-Ibaraki/visualization.R}
 
 
 \section{References}
