@@ -5,10 +5,9 @@
 \contentsline {section}{\numberline {3}Solution Approach}{1}{section.3}
 \contentsline {subsection}{\numberline {3.1}Generating Input Examples}{1}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Nagamochi Ibaraki Algorithm}{2}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Presentation of Results}{2}{subsection.3.3}
-\contentsline {section}{\numberline {4}Nagamochi Ibaraki Algorithm - Explanation}{4}{section.4}
-\contentsline {section}{\numberline {5}Observations and Analysis}{4}{section.5}
-\contentsline {section}{\numberline {6}Discussion}{6}{section.6}
-\contentsline {section}{\numberline {7}ReadMe File}{7}{section.7}
-\contentsline {section}{\numberline {8}Code}{7}{section.8}
-\contentsline {section}{\numberline {9}References}{18}{section.9}
+\contentsline {subsection}{\numberline {3.3}Presentation of Results}{3}{subsection.3.3}
+\contentsline {section}{\numberline {4}Nagamochi Ibaraki Algorithm - Explanation}{5}{section.4}
+\contentsline {section}{\numberline {5}Observations and Analysis}{6}{section.5}
+\contentsline {section}{\numberline {6}Discussion}{8}{section.6}
+\contentsline {section}{\numberline {7}ReadMe File}{8}{section.7}
+\contentsline {section}{\numberline {8}Code}{9}{section.8}

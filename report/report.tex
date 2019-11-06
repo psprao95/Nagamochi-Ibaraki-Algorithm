@@ -77,10 +77,10 @@
 
 \section{Introduction}
 \begin{itemize}
-\item In this project, we try to implement the basic network design model
-\item Give an input number of nodes, traffic demands between different nodes and a parameter k, our program outputs a network topology i.e a directed graph with links and capacities assigned to these links
-\item We do this for range of values of k
-\item  We also analyze how the cost and density of the output network vary with the value of k
+\item In this project, we try to implement the Nagamochi Ibaraki algorithm for finding the edge connectivity of a connected graph
+\item Give an input graph with n nodes and m edges, our program outputs the edge connectivity of the graph
+\item We do this for range of values of m
+\item  We also analyze how the edge connectivity varies with the value of m and assess the spread of the edge connectivity values
 \item We discuss the possible reasons for the above characteristics.
 \end{itemize}
 
@@ -119,45 +119,71 @@ These parameters are then passed on to second module which runs the Nagamochi Ib
 
 
 \subsection{Nagamochi Ibaraki Algorithm}
-Module 2 receives input parameters from the first module (graph).
+Module 2 receives input parameters from the first module (graph). It has the following functions.
 
 \begin{itemize}
 
-\item All pairs shortest paths
+\item \textbf{isConnected()} 
 \begin{itemize}
-\item We compute the shortest distances between all pairs of nodes using the \textbf{FloydWarshall algorithm} i.e. and store them in a  matrix \textit{dist}
-
-\item While computing the above \textit{dist} matrix, we also store the shortest paths between each pair of nodes (i,j) in the pred matrix. Each entry \textbf{pred\textsubscript{ij}} gives the node with \textbf{maximum} number in the shortest path between nodes i and j. 
-
-\item \textbf{Special case:} If there is no node in the shortest path between i and j, pred\textsubscript{ij}=-1
+\item checks if the input graph is connected using depth-first search
+\item If the input graph is disconnected, its edge connectivity is zero
 \end{itemize}
 
-\item Design Links and Capacities
+
+\item \textbf{runAlgorithm()}
 \begin{itemize}
-\item The \textit{capacities} matrix and \textit{links} matrix are initiated with all values equal to \textbf{zero}
-
-\item Let S be the shortest path between nodes k and l, where k$\neq$l. For each edge (i,j) on S  
-\begin{itemize}
-\item If  \textbf{link\textsubscript{ij}} has not been set to 1, set it to 1 
-\item The capacity of link\textsubscript{ij}  is incremented by \textbf{demand\textsubscript{kl}} 
-
-\end{itemize}
-
-\item The above process is repeated for each pair of nodes (k,l) where k$\neq$l.
+\item Runs the Nagamochi Ibaraki algorithm on an input graph
+\item If there are only two nodes in the graph, the number of edges between the two nodes is the edge connectivity
+\item If the number of nodes in the current graph is greater than 2, we run the \textit{maximum adjacency ordering} algorithm
+\item Compute the \textbf{degree} between the last node in the ordering
+\item The last two nodes in the ordering are merged
+\item The \textbf{edge connectivity} of the \textit{merged graph} is computed recursively
+\item The edge connectivity of the graph is minimum of the values of the two values
 
 \end{itemize}
 
 
-\item The \textit{links} and \textit{capacities} matrices are passed on to Module 3, which analyzes how the total cost of the network and densities change with respect to our k parameter.
+
+
+
+\item \textbf{maximumAdjacency()}
+\begin{itemize}
+\item Returns the maximum adjacency ordering of the nodes in the current graph.
+\item The first node in the ordering is chosen \textit{randomly}
+\item Given the first k nodes ($v_{1},v_{2},...v_{k}$) are chosen, the node which has the \textit{maximum} edges to the set ($v_{1},...v_{k}$) is chosen to be $v_{k+1}$
+\end{itemize}
+
+
+\item \textbf{contractGraph()}
+\begin{itemize}
+\item Contracts two nodes in a graph
+\item All resulting self loops are removed 
+\item Parallel edges are kept
+\end{itemize}
+
+
+\item \textbf{dfs()}
+\begin{itemize}
+\item Runs a depth first search on a graph
+\end{itemize}
+
+
+
+\end{itemize}
+
+Modul2 2 computes the edge connectivity of an input graph and passes it on to Module 3.
+
+
 
 
 \subsection{Presentation of Results}
 \begin{itemize}
 
-\item Module 3 takes the output parameters of \textit{Module 2} i.e. the \textbf{edge connectivity} for a graph with n nodes and m edges
+\item \textit{Module 3} takes the output parameters of \textit{Module 2} i.e. the \textbf{edge connectivity} for a graph with n nodes and m edges
 
-\item For each value of m we had generated 5 graphs. The edge connectivity for that value of m is the average of the edge connectivities of these 5 graphs
- \item The above computation is repeated for all \textbf{m} values
+\item For each value of m we had generated 5 graphs. The edge connectivity for that value of m is the \textbf{average} of the edge connectivities of these 5 graphs
+
+ \item The above computation is repeated for all \textbf{m} values in the range [19,190] in steps of 3
 
 \item We compute the \textbf{spread} of the each edge connectivity value. 
 
@@ -167,14 +193,14 @@ Module 2 receives input parameters from the first module (graph).
  
 \item We then try to answer questions such as:
 \begin{itemize}
-\item How does the edge connectivity of the network vary with the value of m?
-\item How does spread of an edge connectivity value vary with the value of m? 
+\item How does the \textbf{edge connectivity} of the network vary with the value of \textbf{m}?
+\item How does \textbf{spread} of an edge connectivity value vary with the value of the \textbf{edge connectivity}? 
 \end{itemize}
 
 
-\end{itemize}
 
-We present the execution of our project using the flow chart below.\\
+
+\item We present the execution of our project using the flow chart below.\\
 
   \includegraphics[scale=0.2]{fig/flowchart.png}
 \end{itemize}
@@ -184,8 +210,9 @@ We present the execution of our project using the flow chart below.\\
 \begin{itemize}
 
 
-\item The goal is to find the edge connectivity of a graph G=(V,E) i.e. the minimum number of edges which must be deleted to disconnect G
+\item The goal is to find the \textit{edge connectivity} of a graph G=(V,E) i.e. the minimum number of edges which must be deleted to disconnect G
 
+\item If the graph is not connected, its edge connectivity is \textbf{zero}
 \item \textbf{Base Case}: There are only two nodes i and j in the graph, so the edge connectivity of the graph  is the number of edges (if any) between i and j
 
 \item \textbf{Recursive Case}: 
@@ -193,7 +220,7 @@ We present the execution of our project using the flow chart below.\\
 \item There are n nodes in the current graph, $n>=3$
 \item We find the maximum adjacency ordering of the nodes in the current graph. Let it be $v_{1},v_{2},..v_{n-1},v_{n}$
 
-\item We take the last two nodes in the above ordering, x=$v_{n-1}$ and y=$v_{n}$. Then, $\lambda(x,y$)= degree(y)
+\item We take the last two nodes in the above ordering, x=$v_{n-1}$ and y=$v_{n}$. Then, $a=\lambda(x,y$)= degree(y)
 
 \item Merge nodes x and y into one node. Let $G_{xy}$ be the resulting graph.
 
@@ -248,40 +275,42 @@ We present the execution of our project using the flow chart below.\\
 \begin{itemize}
 
 
-\item The program produces an output as shown in the figure below.\\
+\item The program produces outputs as shown in the figures below.\\
 
-% \includegraphics[scale=0.32]{fig/plot1.png}
+ \includegraphics[scale=0.32]{fig/photo1.png}\\
  
-\item The output results are stored in a \textit{csv} file. The graphs are generated in \textbf{R}
+  \includegraphics[scale=0.32]{fig/photo2.png}\\
+ 
+\item The output results are stored in a \textit{csv} file. The graphs are generated in \textbf{R}.
 
-\item We plot the graph of the number of edges \textbf{m} vs. the edge connectivity \textbf{$\lambda(G)$}. We can clearly see that the cost of the network \textbf{decreases} with increase in the value of k. \\
+\item We plot the graph of the \textit{number of edges} m vs. the \textit{edge connectivity} $\lambda(G)$
 
-\includegraphics[scale=0.7]{fig/plot1.png}
+\includegraphics[scale=0.6]{fig/plot1.png}\\
 
-\item We plot the graph of edge connectivity values \textbf{lambda(G)} against the \textbf{spread}. We can clearly see that the density of the network \textbf{increases} with increase in the value of k. \\
+\item We can clearly see that the edge connectivity of the network \textbf{increases} with increase in the value of m
+
+
+
+\item We plot the graph of edge connectivity values \textbf{lambda(G)} against their \textbf{spread}\\
 
 \includegraphics[scale=0.6]{fig/plot2.png}
 
 
 
 
-\item We can clearly see that the \textbf{density} of the resulting network \textbf{increases} with increasing value of k.
+\item We can clearly see that the \textbf{spread} of edge connectivity values increases, saturates in the middle and then decreases
 \end{itemize}
  
 \section{Discussion}
 \begin{itemize}
 
-\item Consider a single run of our program with any value of k (say k=5). For each node i, there will be 5 low cost links going out of i (cost=1). When the shortest path algorithm executes, it will try to \textbf{avoid} the high cost links (cost=100) going out of node i.
+\item As the number of edges in the graph increases, the number of edge disjoint paths between any two nodes tends to increase, hence the edge connectivity of the graph also \textbf{increases}
 
-\item Thus by \textbf{limiting k}, we limit the number of links that go out of any node i, and hence limit the \textbf{density} of the network
+\item In our observations, the highest values of spread occur for $\lambda(G)=2,3,4$ with decreasing values on either side
 
-\item This is the reason we observe that as k \textbf{increases}, the density of our resulting network also \textbf{increases}
+\item The reason is that a given value of  edges connectivity (especially the ones in the middle) tends to persist for a range of m values, especially since for each graph we choose edges randomly, which sort of randomises our progression as m increases
 
-\item Consider any pair of nodes (s,t). Let i be any node i on the shortest path from s to t (t cannot be included in this set). As k increases we have more options at all such nodes i to reach t and we could take different paths.
 
-\item The number of edges which repeatedly fall in the shortest path between any 2 pair of nodes \textbf{decreases} and this is why the cost of the network \textbf{decreases}.
-
-\item The network has more of different edges of various edges of different costs rather than few edges some of which may have high costs
 
 \end{itemize}
 
@@ -330,12 +359,7 @@ We present the execution of our project using the flow chart below.\\
 \lstinputlisting{/users/psprao/eclipse-workspace/Nagamochi-Ibaraki/visualization.R}
 
 
-\section{References}
-\begin{itemize}
 
-
-\item Lecture Notes - An Application to Network Design
-\end{itemize}
 
 
 \end{document}
