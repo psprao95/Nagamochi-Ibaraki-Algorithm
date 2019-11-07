@@ -6,7 +6,7 @@ lambda<-data[,2]
 
 
 # Scatterplot of K vs Cost of Network
-plot(m,lambda,xlab="m",ylab="lambda(G) ",main="Edge connectivity vs Number of Edges")
+plot(m,lambda,xlab="m",ylab="lambda(G) ",main="Number of Edges vs Edge")
 lines(lambda~m)
 
 
@@ -18,6 +18,6 @@ spread<-data[,2]
 
 
 # Scatterplot of K vs Cost of Network
-plot(lambda,spread,xlab="lambda(G)",ylab="spread ",main="Spread vs Edge connectivity  ")
+plot(lambda,spread,xlab="lambda(G)",ylab="spread ",main="Spread of Edge Connectivities  ")
 lines(spread~lambda)
 
